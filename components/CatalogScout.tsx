@@ -122,8 +122,6 @@ function CompetitorRow({
 
 export default function CatalogScout() {
   const [query, setQuery] = useState("");
-  const [token, setToken] = useState("");
-  const [tokenVisible, setTokenVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState("Consultando API...");
   const [error, setError] = useState<string | null>(null);
@@ -150,7 +148,7 @@ export default function CatalogScout() {
 
         if (isEAN(rawQuery)) {
           setLoadingMsg("Resolviendo EAN a catálogo...");
-          catalogId = await resolveEANtoCatalog(rawQuery, token || undefined);
+          catalogId = await resolveEANtoCatalog(rawQuery);
           setResolvedNote(`EAN ${rawQuery} resuelto a ${catalogId}`);
         } else if (!isMLA(rawQuery)) {
           throw new Error(
@@ -161,8 +159,8 @@ export default function CatalogScout() {
         setLoadingMsg("Obteniendo competidores...");
 
         const [itemsData, catalogDetail] = await Promise.all([
-          getCatalogItems(catalogId, token || undefined),
-          getCatalogDetail(catalogId, token || undefined),
+          getCatalogItems(catalogId),
+          getCatalogDetail(catalogId),
         ]);
 
         const items = itemsData.results ?? itemsData.items ?? [];
@@ -190,7 +188,7 @@ export default function CatalogScout() {
         setLoading(false);
       }
     },
-    [query, token, addToHistory]
+    [query, addToHistory]
   );
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -243,35 +241,6 @@ export default function CatalogScout() {
             <span className="ti ti-search" aria-hidden />
             Buscar
           </button>
-        </div>
-
-        <div className={styles.tokenRow}>
-          <label className={styles.inputLabel} htmlFor="tokenInput">
-            Access Token
-          </label>
-          <div className={styles.tokenWrap}>
-            <input
-              id="tokenInput"
-              type={tokenVisible ? "text" : "password"}
-              className={`${styles.input} ${styles.tokenInput}`}
-              placeholder="APP_USR-..."
-              value={token}
-              onChange={(e) => setToken(e.target.value)}
-              autoComplete="off"
-              spellCheck={false}
-            />
-            <button
-              className={styles.tokenToggle}
-              onClick={() => setTokenVisible((v) => !v)}
-              aria-label={tokenVisible ? "Ocultar token" : "Ver token"}
-              type="button"
-            >
-              <span
-                className={`ti ${tokenVisible ? "ti-eye-off" : "ti-eye"}`}
-                aria-hidden
-              />
-            </button>
-          </div>
         </div>
 
         <p className={styles.hint}>
