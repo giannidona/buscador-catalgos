@@ -1,7 +1,7 @@
 // app/catalog-scout/page.tsx
 // (o pages/catalog-scout.tsx si usás Pages Router — solo cambiá el export default)
 
-import CatalogScout from "@/components/CatalogScout";
+import CatalogScoutApp from "@/components/CatalogScoutApp";
 
 export const metadata = {
   title: "Catalog Scout — MercadoLibre",
@@ -9,5 +9,5 @@ export const metadata = {
 };
 
 export default function CatalogScoutPage() {
-  return <CatalogScout />;
+  return <CatalogScoutApp />;
 }

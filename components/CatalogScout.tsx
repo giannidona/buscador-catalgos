@@ -145,7 +145,7 @@ function CompetitorRow({
 
 // ─── main component ──────────────────────────────────────────────────────────
 
-export default function CatalogScout() {
+export default function CatalogScout({ hideHeader = false }: { hideHeader?: boolean }) {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState("Consultando API...");
@@ -235,16 +235,17 @@ export default function CatalogScout() {
 
   return (
     <div className={styles.app}>
-      {/* Header */}
-      <div className={styles.header}>
-        <h1 className={styles.title}>
-          <span className={styles.mlBadge}>ML</span>
-          Catalog Scout
-        </h1>
-        <p className={styles.subtitle}>
-          Buscá competidores por ID de catálogo (MLA) o código EAN
-        </p>
-      </div>
+      {!hideHeader && (
+        <div className={styles.header}>
+          <h1 className={styles.title}>
+            <span className={styles.mlBadge}>ML</span>
+            Catalog Scout
+          </h1>
+          <p className={styles.subtitle}>
+            Buscá competidores por ID de catálogo (MLA) o código EAN
+          </p>
+        </div>
+      )}
 
       {/* Search box */}
       <div className={styles.searchBox}>

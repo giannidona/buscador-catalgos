@@ -3,6 +3,7 @@
 import type {
   MLItemsResponse,
   MLCatalogDetail,
+  EanAnalyzeResult,
 } from "@/types/mercadolibre";
 
 async function fetchApi<T>(path: string): Promise<T> {
@@ -41,4 +42,10 @@ export async function getCatalogDetail(
   } catch {
     return null;
   }
+}
+
+export async function analyzeEan(ean: string): Promise<EanAnalyzeResult> {
+  return fetchApi<EanAnalyzeResult>(
+    `/api/ml/ean-analyze?ean=${encodeURIComponent(ean)}`
+  );
 }

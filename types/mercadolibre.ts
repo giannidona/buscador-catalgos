@@ -58,6 +58,25 @@ export interface MLSearchResponse {
   };
 }
 
+export type EanAnalyzeResult =
+  | {
+      status: "empty";
+      ean: string;
+      catalogId: string;
+      title: string | null;
+      catalogUrl: string;
+    }
+  | {
+      status: "active";
+      ean: string;
+      catalogId: string;
+      title: string | null;
+      competitorCount: number;
+      catalogUrl: string;
+    }
+  | { status: "unresolved"; ean: string; message: string }
+  | { status: "error"; ean: string; message: string };
+
 export interface CatalogData {
   catalogId: string;
   title: string;

@@ -1,0 +1,254 @@
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1.5rem 2.5rem;
+}
+
+.intro {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0 0 1.25rem;
+}
+
+.panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.fileInput {
+  display: none;
+}
+
+.fileBtn {
+  height: 38px;
+  padding: 0 16px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--foreground);
+  cursor: pointer;
+}
+
+.fileBtn:hover:not(:disabled) {
+  border-color: var(--text-muted);
+}
+
+.fileBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fileMeta {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.primaryBtn {
+  height: 38px;
+  padding: 0 18px;
+  background: #ffe600;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+}
+
+.primaryBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.secondaryBtn {
+  height: 38px;
+  padding: 0 16px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--foreground);
+  cursor: pointer;
+}
+
+.exportBtn {
+  height: 38px;
+  padding: 0 16px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--foreground);
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.exportBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.errorBox {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 1rem;
+  font-size: 14px;
+  color: #b91c1c;
+}
+
+@media (prefers-color-scheme: dark) {
+  .errorBox {
+    background: #2a1212;
+    border-color: #7f1d1d;
+    color: #fca5a5;
+  }
+}
+
+.progressBlock {
+  margin-bottom: 1rem;
+}
+
+.progressBar {
+  height: 8px;
+  background: var(--surface-muted);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.progressFill {
+  height: 100%;
+  background: #ffe600;
+  transition: width 0.2s ease;
+}
+
+.progressText {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 8px 0 0;
+}
+
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.summary strong {
+  color: var(--foreground);
+}
+
+.log {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.logTitle {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-subtle);
+  padding: 12px 16px;
+  margin: 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.logList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.logList li {
+  display: grid;
+  grid-template-columns: 120px 110px 1fr;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border-subtle);
+  align-items: center;
+}
+
+.logList li:last-child {
+  border-bottom: none;
+}
+
+.logEan {
+  font-family: var(--font-mono, monospace);
+  color: var(--foreground);
+}
+
+.logMla {
+  font-family: var(--font-mono, monospace);
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.logStatus {
+  color: var(--text-muted);
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logEmpty {
+  background: var(--winner-bg);
+}
+
+.logEmpty .logStatus {
+  color: #b8860b;
+  font-weight: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+  .logEmpty .logStatus {
+    color: #fcd34d;
+  }
+}
+
+.logActive .logStatus {
+  color: var(--success);
+}
+
+@media (max-width: 520px) {
+  .logList li {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .logStatus {
+    text-align: left;
+  }
+
+  .exportBtn {
+    margin-left: 0;
+    width: 100%;
+  }
+}
