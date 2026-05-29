@@ -122,11 +122,6 @@ function CompetitorRow({
         {hasFreeShipping && (
           <span className={`${styles.tag} ${styles.tagFree}`}>Envío gratis</span>
         )}
-        {itemUrl && (
-          <span className={`${styles.tag} ${styles.tagLink}`} aria-hidden>
-            <span className="ti ti-external-link" />
-          </span>
-        )}
       </div>
     </>
   );
@@ -201,9 +196,17 @@ export default function CatalogScout() {
 
         addToHistory(rawQuery.toUpperCase());
 
+        const title =
+          catalogDetail?.name ?? catalogDetail?.title ?? catalogId;
+
         setData({
           catalogId,
-          title: catalogDetail?.name ?? catalogDetail?.title ?? catalogId,
+          title,
+          catalogUrl: getCatalogPageUrl(
+            catalogId,
+            title,
+            catalogDetail?.permalink
+          ),
           status: catalogDetail?.status ?? "active",
           totalCompetitors,
           minPrice: prices.length ? Math.min(...prices) : null,
@@ -328,17 +331,14 @@ export default function CatalogScout() {
 
           {/* Catalog header */}
           <a
-            href={getCatalogPageUrl(data.catalogId)}
+            href={data.catalogUrl}
             target="_blank"
             rel="noopener noreferrer"
             className={`${styles.catalogHeader} ${styles.catalogHeaderLink}`}
             aria-label={`Ver catálogo ${data.title} en Mercado Libre`}
           >
             <div className={styles.catalogInfo}>
-              <div className={styles.catalogId}>
-                {data.catalogId}
-                <span className={`ti ti-external-link ${styles.catalogLinkIcon}`} aria-hidden />
-              </div>
+              <div className={styles.catalogId}>{data.catalogId}</div>
               <div className={styles.catalogTitle}>{data.title}</div>
               <div className={styles.catalogStatus}>
                 <span className={`${styles.pill} ${styles.pillGreen}`}>

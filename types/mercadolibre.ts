@@ -39,6 +39,7 @@ export interface MLCatalogDetail {
   title?: string;
   status?: string;
   domain_id?: string;
+  permalink?: string;
   pictures?: { url: string }[];
 }
 
@@ -60,6 +61,7 @@ export interface MLSearchResponse {
 export interface CatalogData {
   catalogId: string;
   title: string;
+  catalogUrl: string;
   status: string;
   totalCompetitors: number;
   minPrice: number | null;
