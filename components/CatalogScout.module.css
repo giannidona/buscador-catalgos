@@ -252,6 +252,35 @@
   margin-bottom: 12px;
 }
 
+.catalogHeaderLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.catalogHeaderLink:hover {
+  border-color: var(--text-muted);
+  background: var(--surface-muted);
+}
+
+.catalogHeaderLink:focus-visible {
+  outline: 2px solid #ffe600;
+  outline-offset: 2px;
+}
+
+.catalogLinkIcon {
+  margin-left: 6px;
+  font-size: 12px;
+  color: var(--text-subtle);
+  vertical-align: middle;
+}
+
+.catalogHeaderLink:hover .catalogLinkIcon {
+  color: var(--text-muted);
+}
+
 .catalogId {
   font-size: 11px;
   color: var(--text-subtle);
@@ -369,11 +398,24 @@
   transition: background 0.1s;
 }
 
+.compRowLink {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.compRowLink:focus-visible {
+  outline: 2px solid #ffe600;
+  outline-offset: -2px;
+}
+
 .compRow:last-child {
   border-bottom: none;
 }
 
-.compRow:hover {
+.compRow:hover,
+.compRowLink:hover {
   background: var(--row-hover);
 }
 
@@ -381,8 +423,10 @@
   background: var(--winner-bg);
 }
 
-.compRowWinner:hover {
+.compRowWinner:hover,
+.compRowLink.compRowWinner:hover {
   background: var(--winner-bg);
+  filter: brightness(1.05);
 }
 
 .compRank {
@@ -465,6 +509,19 @@
 .tagFree {
   background: #dcfce7;
   color: #15803d;
+}
+
+.tagLink {
+  background: transparent;
+  color: var(--text-subtle);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  line-height: 1;
+}
+
+.compRowLink:hover .tagLink {
+  color: var(--foreground);
+  border-color: var(--text-muted);
 }
 
 @media (prefers-color-scheme: dark) {

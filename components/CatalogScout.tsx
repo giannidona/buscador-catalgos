@@ -9,6 +9,7 @@ import {
   getCatalogItems,
   getCatalogDetail,
 } from "@/lib/mlApi";
+import { getCatalogPageUrl, getItemPageUrl } from "@/lib/mlUrls";
 import styles from "./CatalogScout.module.css";
 
 const MAX_VISIBLE_ITEMS = 10;
@@ -87,8 +88,14 @@ function CompetitorRow({
     else if (price === maxPrice) priceClass += ` ${styles.priceMax}`;
   }
 
-  return (
-    <div className={`${styles.compRow} ${isWinner ? styles.compRowWinner : ""}`}>
+  const itemUrl = item.item_id
+    ? getItemPageUrl(item.item_id, item.permalink)
+    : undefined;
+
+  const rowClass = `${styles.compRow} ${isWinner ? styles.compRowWinner : ""}`;
+
+  const content = (
+    <>
       <div className={`${styles.compRank} ${isWinner ? styles.winner : ""}`}>
         {isWinner ? (
           <span className="ti ti-crown" aria-hidden />
@@ -115,8 +122,29 @@ function CompetitorRow({
         {hasFreeShipping && (
           <span className={`${styles.tag} ${styles.tagFree}`}>Envío gratis</span>
         )}
+        {itemUrl && (
+          <span className={`${styles.tag} ${styles.tagLink}`} aria-hidden>
+            <span className="ti ti-external-link" />
+          </span>
+        )}
       </div>
-    </div>
+    </>
+  );
+
+  if (!itemUrl) {
+    return <div className={rowClass}>{content}</div>;
+  }
+
+  return (
+    <a
+      href={itemUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`${rowClass} ${styles.compRowLink}`}
+      aria-label={`Ver publicación de ${sellerName} en Mercado Libre`}
+    >
+      {content}
+    </a>
   );
 }
 
@@ -299,9 +327,18 @@ export default function CatalogScout() {
           )}
 
           {/* Catalog header */}
-          <div className={styles.catalogHeader}>
+          <a
+            href={getCatalogPageUrl(data.catalogId)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${styles.catalogHeader} ${styles.catalogHeaderLink}`}
+            aria-label={`Ver catálogo ${data.title} en Mercado Libre`}
+          >
             <div className={styles.catalogInfo}>
-              <div className={styles.catalogId}>{data.catalogId}</div>
+              <div className={styles.catalogId}>
+                {data.catalogId}
+                <span className={`ti ti-external-link ${styles.catalogLinkIcon}`} aria-hidden />
+              </div>
               <div className={styles.catalogTitle}>{data.title}</div>
               <div className={styles.catalogStatus}>
                 <span className={`${styles.pill} ${styles.pillGreen}`}>
@@ -309,7 +346,7 @@ export default function CatalogScout() {
                 </span>
               </div>
             </div>
-          </div>
+          </a>
 
           {/* Metrics */}
           <div className={styles.metrics}>
