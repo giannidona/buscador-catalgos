@@ -6,10 +6,11 @@ import type {
   MLSearchResponse,
 } from "@/types/mercadolibre";
 import { getAccessToken } from "@/lib/mlAuth";
+import { enrichItemsWithSellerNames } from "@/lib/mlSellers";
 
 const ML_API = "https://api.mercadolibre.com";
 
-async function mlFetch(path: string): Promise<Response> {
+export async function mlFetch(path: string): Promise<Response> {
   const token = await getAccessToken();
   return fetch(`${ML_API}${path}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -54,7 +55,13 @@ export async function getCatalogItems(
     throw new Error(`Error al obtener ítems (HTTP ${res.status})`);
   }
 
-  return res.json();
+  const data: MLItemsResponse = await res.json();
+  const raw = data.results ?? data.items ?? [];
+  const enriched = await enrichItemsWithSellerNames(raw);
+
+  if (data.results) return { ...data, results: enriched };
+  if (data.items) return { ...data, items: enriched };
+  return { ...data, results: enriched };
 }
 
 export async function getCatalogDetail(

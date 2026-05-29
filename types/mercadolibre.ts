@@ -2,6 +2,7 @@
 
 export interface MLItem {
   item_id: string;
+  seller_id?: number;
   title?: string;
   price?: number;
   selling_price?: number;

@@ -75,7 +75,9 @@ function CompetitorRow({
   const price = item.price ?? item.selling_price;
   const isWinner = rank === 1 || item.is_winner;
   const sellerName =
-    item.seller_nickname ?? item.seller?.nickname ?? `Vendedor ${rank}`;
+    item.seller_nickname?.trim() ||
+    item.seller?.nickname?.trim() ||
+    (item.seller_id != null ? `ID ${item.seller_id}` : `Vendedor ${rank}`);
   const hasFreeShipping =
     item.shipping?.free_shipping ?? item.free_shipping ?? false;
 
@@ -86,7 +88,7 @@ function CompetitorRow({
   }
 
   return (
-    <div className={styles.compRow}>
+    <div className={`${styles.compRow} ${isWinner ? styles.compRowWinner : ""}`}>
       <div className={`${styles.compRank} ${isWinner ? styles.winner : ""}`}>
         {isWinner ? (
           <span className="ti ti-crown" aria-hidden />
@@ -329,6 +331,7 @@ export default function CatalogScout() {
               label="Precio máximo"
               value={data.maxPrice != null ? formatPrice(data.maxPrice) : "—"}
               sub="más alto del catálogo"
+              accent="var(--foreground)"
             />
           </div>
 
