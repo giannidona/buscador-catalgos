@@ -4,9 +4,11 @@ import { useCallback, useRef, useState } from "react";
 import type { EanAnalyzeResult } from "@/types/mercadolibre";
 import { analyzeEan } from "@/lib/mlApi";
 import {
-  parseEansFromExcelBuffer,
+  parseEansFromFile,
   exportEmptyCatalogsToExcel,
+  exportEmptyCatalogsToCsv,
   downloadExcelBuffer,
+  downloadTextFile,
 } from "@/lib/eanExcel";
 import styles from "./EanBulkUpload.module.css";
 
@@ -52,11 +54,11 @@ export default function EanBulkUpload() {
     setProgress({ current: 0, total: 0 });
 
     const buffer = await file.arrayBuffer();
-    const parsed = parseEansFromExcelBuffer(buffer);
+    const parsed = parseEansFromFile(buffer, file.name);
 
     if (!parsed.length) {
       setError(
-        "No se encontraron EANs válidos. Usá una columna EAN/GTIN o la primera columna."
+        "No se encontraron EANs válidos. En Excel o CSV usá una columna EAN/GTIN o la primera columna."
       );
       setEans([]);
       setFileName(null);
@@ -141,11 +143,20 @@ export default function EanBulkUpload() {
     abortRef.current = true;
   };
 
-  const exportExcel = () => {
+  const exportResults = (format: "xlsx" | "csv") => {
     if (!emptyRows.length) return;
-    const buffer = exportEmptyCatalogsToExcel(emptyRows);
     const stamp = new Date().toISOString().slice(0, 10);
-    downloadExcelBuffer(buffer, `catalogos-vacios-${stamp}.xlsx`);
+    if (format === "csv") {
+      const csv = exportEmptyCatalogsToCsv(emptyRows);
+      downloadTextFile(
+        csv,
+        `catalogos-vacios-${stamp}.csv`,
+        "text/csv;charset=utf-8"
+      );
+    } else {
+      const buffer = exportEmptyCatalogsToExcel(emptyRows);
+      downloadExcelBuffer(buffer, `catalogos-vacios-${stamp}.xlsx`);
+    }
   };
 
   const pct =
@@ -156,10 +167,10 @@ export default function EanBulkUpload() {
   return (
     <div className={styles.wrap}>
       <p className={styles.intro}>
-        Subí un Excel con EANs (columna <strong>EAN</strong> o primera columna).
-        Se revisa cada código en Mercado Libre; si el catálogo está vacío (sin
-        publicaciones / &quot;no encontrado&quot;), entra en el Excel de salida
-        para publicar.
+        Subí un <strong>Excel</strong> (.xlsx, .xls) o <strong>CSV</strong> con
+        EANs (columna <strong>EAN</strong> / <strong>GTIN</strong> o primera
+        columna; CSV con coma o punto y coma). Si el catálogo está vacío, podés
+        exportar el resultado en Excel o CSV.
       </p>
 
       <div className={styles.panel}>
@@ -177,7 +188,7 @@ export default function EanBulkUpload() {
           onClick={() => inputRef.current?.click()}
           disabled={running}
         >
-          Elegir Excel
+          Elegir archivo
         </button>
         {fileName && (
           <span className={styles.fileMeta}>
@@ -203,10 +214,18 @@ export default function EanBulkUpload() {
         <button
           type="button"
           className={styles.exportBtn}
-          onClick={exportExcel}
+          onClick={() => exportResults("xlsx")}
           disabled={!emptyRows.length || running}
         >
-          Descargar vacíos ({emptyRows.length})
+          Excel ({emptyRows.length})
+        </button>
+        <button
+          type="button"
+          className={styles.exportBtn}
+          onClick={() => exportResults("csv")}
+          disabled={!emptyRows.length || running}
+        >
+          CSV ({emptyRows.length})
         </button>
       </div>
 
